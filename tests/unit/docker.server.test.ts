@@ -32,9 +32,13 @@ const mocks = vi.hoisted(() => {
   return { mockContainer, mockDockerInstance, mockFollowProgress };
 });
 
-vi.mock("dockerode", () => ({
-  default: vi.fn(() => mocks.mockDockerInstance),
-}));
+vi.mock("dockerode", () => {
+  // Returning an object from a constructor makes `new` use that object
+  const DockerMock = function () {
+    return mocks.mockDockerInstance;
+  };
+  return { default: DockerMock };
+});
 
 // Import AFTER vi.mock so the mock is in place
 import {
