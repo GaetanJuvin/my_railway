@@ -77,7 +77,10 @@ export default function NewProjectPage() {
             </div>
             <div className="flex gap-2">
               <Button type="submit">Create project</Button>
-              <Link to="/projects" className={buttonVariants({ variant: "ghost" })}>
+              <Link
+                to="/projects"
+                className={buttonVariants({ variant: "ghost" })}
+              >
                 Cancel
               </Link>
             </div>

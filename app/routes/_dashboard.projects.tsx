@@ -33,14 +33,20 @@ export default function ProjectsPage() {
           <p className="text-muted-foreground">
             No projects yet. Create one to get started.
           </p>
-          <Link to="/projects/new" className={buttonVariants({ className: "mt-4" })}>
+          <Link
+            to="/projects/new"
+            className={buttonVariants({ className: "mt-4" })}
+          >
             Create your first project
           </Link>
         </div>
       ) : (
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {projects.map((project) => (
-            <Card key={project.id} className="hover:shadow-md transition-shadow">
+            <Card
+              key={project.id}
+              className="hover:shadow-md transition-shadow"
+            >
               <CardHeader>
                 <CardTitle>
                   <Link

@@ -35,7 +35,12 @@ export function Sidebar({ user }: SidebarProps) {
           {user.email}
         </p>
         <Form method="post">
-          <Button variant="ghost" size="sm" type="submit" className="w-full justify-start">
+          <Button
+            variant="ghost"
+            size="sm"
+            type="submit"
+            className="w-full justify-start"
+          >
             Sign out
           </Button>
         </Form>

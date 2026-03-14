@@ -43,36 +43,42 @@ External:
 ## Module Responsibilities
 
 ### UI Layer (`app/routes/`, `app/components/`)
+
 - React Router v7 file-based routing
 - shadcn/ui components for consistent design
 - Real-time updates via WebSocket (deploy logs, metrics)
 - No business logic — delegates to loaders/actions
 
 ### API Layer (loaders + actions in route files)
+
 - Input validation (zod schemas)
 - Auth checks
 - Calls service layer
 - Returns typed data to components
 
 ### Deploy Service (`app/lib/deployer.server.ts`)
+
 - Git clone → Dockerfile detection → Docker build → container start
 - Build log streaming via WebSocket
 - Rollback (restart previous container image)
 - Environment variable injection
 
 ### Database Service (`app/lib/databases.server.ts`)
+
 - Provision Postgres/Redis/MySQL containers
 - Generate connection strings
 - Expose to linked services via env vars
 - Backup/restore
 
 ### Networking Service (`app/lib/networking.server.ts`)
+
 - Traefik dynamic configuration
 - Public URL generation (subdomain-based)
 - Custom domain + SSL via Let's Encrypt
 - Private service-to-service networking (Docker network)
 
 ### Runtime Backend (`app/lib/docker.server.ts`)
+
 - Thin wrapper around dockerode
 - Container lifecycle: create, start, stop, remove, logs
 - Image management: build, pull, tag
@@ -80,11 +86,13 @@ External:
 - Volume management
 
 ### Data Layer (`app/lib/db.server.ts`, `drizzle/`)
+
 - Drizzle ORM with typed schemas
 - Migrations in `drizzle/` directory
 - SQLite for local dev, Postgres for production
 
 ### CLI (`cli/`)
+
 - `myrailway login` — authenticate
 - `myrailway deploy` — trigger deploy from current dir
 - `myrailway up` — deploy + stream logs
