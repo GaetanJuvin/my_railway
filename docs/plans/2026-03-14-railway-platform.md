@@ -15,6 +15,7 @@
 ### Task 1: Project Scaffold — React Router v7 + shadcn
 
 **Files:**
+
 - Create: `package.json`
 - Create: `react-router.config.ts`
 - Create: `tsconfig.json`
@@ -60,6 +61,7 @@ git commit -m "feat: project scaffold with React Router v7 + shadcn/ui"
 ### Task 2: Database Schema + Drizzle Setup
 
 **Files:**
+
 - Create: `app/lib/db.server.ts`
 - Create: `drizzle/schema.ts`
 - Create: `drizzle.config.ts`
@@ -67,6 +69,7 @@ git commit -m "feat: project scaffold with React Router v7 + shadcn/ui"
 **Step 1: Write the database schema**
 
 `drizzle/schema.ts`:
+
 ```typescript
 import { sqliteTable, text, integer, real } from "drizzle-orm/sqlite-core";
 
@@ -80,7 +83,9 @@ export const users = sqliteTable("users", {
 
 export const projects = sqliteTable("projects", {
   id: text("id").primaryKey(),
-  userId: text("user_id").notNull().references(() => users.id),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
   name: text("name").notNull(),
   description: text("description"),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
@@ -89,7 +94,9 @@ export const projects = sqliteTable("projects", {
 
 export const services = sqliteTable("services", {
   id: text("id").primaryKey(),
-  projectId: text("project_id").notNull().references(() => projects.id),
+  projectId: text("project_id")
+    .notNull()
+    .references(() => projects.id),
   name: text("name").notNull(),
   type: text("type").notNull(), // "web", "worker", "cron"
   repoUrl: text("repo_url"),
@@ -102,7 +109,9 @@ export const services = sqliteTable("services", {
 
 export const deployments = sqliteTable("deployments", {
   id: text("id").primaryKey(),
-  serviceId: text("service_id").notNull().references(() => services.id),
+  serviceId: text("service_id")
+    .notNull()
+    .references(() => services.id),
   status: text("status").notNull(), // "building", "deploying", "active", "failed", "rolled_back"
   commitSha: text("commit_sha"),
   commitMessage: text("commit_message"),
@@ -115,7 +124,9 @@ export const deployments = sqliteTable("deployments", {
 
 export const envVars = sqliteTable("env_vars", {
   id: text("id").primaryKey(),
-  serviceId: text("service_id").notNull().references(() => services.id),
+  serviceId: text("service_id")
+    .notNull()
+    .references(() => services.id),
   environmentId: text("environment_id").references(() => environments.id),
   key: text("key").notNull(),
   value: text("value").notNull(),
@@ -124,7 +135,9 @@ export const envVars = sqliteTable("env_vars", {
 
 export const environments = sqliteTable("environments", {
   id: text("id").primaryKey(),
-  projectId: text("project_id").notNull().references(() => projects.id),
+  projectId: text("project_id")
+    .notNull()
+    .references(() => projects.id),
   name: text("name").notNull(), // "production", "staging", "preview-pr-123"
   isProduction: integer("is_production", { mode: "boolean" }).default(false),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
@@ -132,7 +145,9 @@ export const environments = sqliteTable("environments", {
 
 export const databases = sqliteTable("databases", {
   id: text("id").primaryKey(),
-  projectId: text("project_id").notNull().references(() => projects.id),
+  projectId: text("project_id")
+    .notNull()
+    .references(() => projects.id),
   name: text("name").notNull(),
   engine: text("engine").notNull(), // "postgres", "redis", "mysql"
   version: text("version"),
@@ -144,7 +159,9 @@ export const databases = sqliteTable("databases", {
 
 export const domains = sqliteTable("domains", {
   id: text("id").primaryKey(),
-  serviceId: text("service_id").notNull().references(() => services.id),
+  serviceId: text("service_id")
+    .notNull()
+    .references(() => services.id),
   hostname: text("hostname").notNull().unique(),
   isCustom: integer("is_custom", { mode: "boolean" }).default(false),
   sslEnabled: integer("ssl_enabled", { mode: "boolean" }).default(true),
@@ -153,7 +170,9 @@ export const domains = sqliteTable("domains", {
 
 export const cronJobs = sqliteTable("cron_jobs", {
   id: text("id").primaryKey(),
-  serviceId: text("service_id").notNull().references(() => services.id),
+  serviceId: text("service_id")
+    .notNull()
+    .references(() => services.id),
   schedule: text("schedule").notNull(), // cron expression
   command: text("command").notNull(),
   lastRunAt: integer("last_run_at", { mode: "timestamp" }),
@@ -162,7 +181,9 @@ export const cronJobs = sqliteTable("cron_jobs", {
 
 export const volumes = sqliteTable("volumes", {
   id: text("id").primaryKey(),
-  serviceId: text("service_id").notNull().references(() => services.id),
+  serviceId: text("service_id")
+    .notNull()
+    .references(() => services.id),
   name: text("name").notNull(),
   mountPath: text("mount_path").notNull(),
   sizeGb: real("size_gb").default(1),
@@ -173,20 +194,28 @@ export const volumes = sqliteTable("volumes", {
 export const teams = sqliteTable("teams", {
   id: text("id").primaryKey(),
   name: text("name").notNull(),
-  ownerId: text("owner_id").notNull().references(() => users.id),
+  ownerId: text("owner_id")
+    .notNull()
+    .references(() => users.id),
   createdAt: integer("created_at", { mode: "timestamp" }).notNull(),
 });
 
 export const teamMembers = sqliteTable("team_members", {
   id: text("id").primaryKey(),
-  teamId: text("team_id").notNull().references(() => teams.id),
-  userId: text("user_id").notNull().references(() => users.id),
+  teamId: text("team_id")
+    .notNull()
+    .references(() => teams.id),
+  userId: text("user_id")
+    .notNull()
+    .references(() => users.id),
   role: text("role").notNull(), // "admin", "member", "viewer"
 });
 
 export const alerts = sqliteTable("alerts", {
   id: text("id").primaryKey(),
-  serviceId: text("service_id").notNull().references(() => services.id),
+  serviceId: text("service_id")
+    .notNull()
+    .references(() => services.id),
   name: text("name").notNull(),
   condition: text("condition").notNull(), // JSON: { metric, operator, threshold }
   channel: text("channel").notNull(), // "slack", "discord", "email"
@@ -197,7 +226,9 @@ export const alerts = sqliteTable("alerts", {
 
 export const metrics = sqliteTable("metrics", {
   id: text("id").primaryKey(),
-  serviceId: text("service_id").notNull().references(() => services.id),
+  serviceId: text("service_id")
+    .notNull()
+    .references(() => services.id),
   type: text("type").notNull(), // "cpu", "memory", "network", "requests"
   value: real("value").notNull(),
   timestamp: integer("timestamp", { mode: "timestamp" }).notNull(),
@@ -207,6 +238,7 @@ export const metrics = sqliteTable("metrics", {
 **Step 2: Create db.server.ts**
 
 `app/lib/db.server.ts`:
+
 ```typescript
 import Database from "better-sqlite3";
 import { drizzle } from "drizzle-orm/better-sqlite3";
@@ -252,6 +284,7 @@ git commit -m "feat: database schema with Drizzle ORM (all core entities)"
 ### Task 3: Auth — Session-Based Login/Signup
 
 **Files:**
+
 - Create: `app/lib/auth.server.ts`
 - Create: `app/routes/_auth.login.tsx`
 - Create: `app/routes/_auth.signup.tsx`
@@ -266,6 +299,7 @@ npm install -D @types/bcryptjs
 **Step 2: Implement auth server logic**
 
 `app/lib/auth.server.ts`:
+
 ```typescript
 import bcrypt from "bcryptjs";
 import { createCookieSessionStorage, redirect } from "react-router";
@@ -290,7 +324,13 @@ export async function signup(email: string, password: string, name: string) {
   if (existing) throw new Error("Email already registered");
 
   const passwordHash = await bcrypt.hash(password, 10);
-  const user = { id: randomUUID(), email, name, passwordHash, createdAt: new Date() };
+  const user = {
+    id: randomUUID(),
+    email,
+    name,
+    passwordHash,
+    createdAt: new Date(),
+  };
   db.insert(users).values(user).run();
   return user;
 }
@@ -314,7 +354,9 @@ export async function createSession(userId: string, redirectTo: string) {
 }
 
 export async function requireUser(request: Request) {
-  const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+  const session = await sessionStorage.getSession(
+    request.headers.get("Cookie"),
+  );
   const userId = session.get("userId");
   if (!userId) throw redirect("/login");
 
@@ -325,7 +367,9 @@ export async function requireUser(request: Request) {
 }
 
 export async function logout(request: Request) {
-  const session = await sessionStorage.getSession(request.headers.get("Cookie"));
+  const session = await sessionStorage.getSession(
+    request.headers.get("Cookie"),
+  );
   return redirect("/login", {
     headers: { "Set-Cookie": await sessionStorage.destroySession(session) },
   });
@@ -335,6 +379,7 @@ export async function logout(request: Request) {
 **Step 3: Implement login route**
 
 `app/routes/_auth.login.tsx`:
+
 ```tsx
 import type { Route } from "./+types/_auth.login";
 import { login, createSession } from "~/lib/auth.server";
@@ -379,10 +424,15 @@ export default function LoginPage() {
               <Label htmlFor="password">Password</Label>
               <Input id="password" name="password" type="password" required />
             </div>
-            <Button type="submit" className="w-full">Sign in</Button>
+            <Button type="submit" className="w-full">
+              Sign in
+            </Button>
           </Form>
           <p className="mt-4 text-center text-sm">
-            No account? <Link to="/signup" className="underline">Sign up</Link>
+            No account?{" "}
+            <Link to="/signup" className="underline">
+              Sign up
+            </Link>
           </p>
         </CardContent>
       </Card>
@@ -409,6 +459,7 @@ git commit -m "feat: session-based auth with login/signup"
 ### Task 4: Dashboard Layout + Project List
 
 **Files:**
+
 - Create: `app/routes/_dashboard.tsx`
 - Create: `app/routes/_dashboard.projects.tsx`
 - Create: `app/routes/_dashboard.projects.new.tsx`
@@ -417,6 +468,7 @@ git commit -m "feat: session-based auth with login/signup"
 **Step 1: Create dashboard layout with sidebar**
 
 `app/routes/_dashboard.tsx`:
+
 ```tsx
 import type { Route } from "./+types/_dashboard";
 import { requireUser, logout } from "~/lib/auth.server";
@@ -447,6 +499,7 @@ export default function DashboardLayout() {
 ```
 
 `app/components/sidebar.tsx`:
+
 ```tsx
 import { NavLink, Form } from "react-router";
 import { Button } from "~/components/ui/button";
@@ -487,6 +540,7 @@ export function Sidebar({ user }: SidebarProps) {
 **Step 2: Create project list page**
 
 `app/routes/_dashboard.projects.tsx`:
+
 ```tsx
 import type { Route } from "./+types/_dashboard.projects";
 import { requireUser } from "~/lib/auth.server";
@@ -499,7 +553,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 
 export async function loader({ request }: Route.LoaderArgs) {
   const user = await requireUser(request);
-  const userProjects = db.select().from(projects).where(eq(projects.userId, user.id)).all();
+  const userProjects = db
+    .select()
+    .from(projects)
+    .where(eq(projects.userId, user.id))
+    .all();
   return { projects: userProjects };
 }
 
@@ -532,7 +590,9 @@ export default function ProjectsPage() {
           </Card>
         ))}
         {projects.length === 0 && (
-          <p className="text-muted-foreground">No projects yet. Create one to get started.</p>
+          <p className="text-muted-foreground">
+            No projects yet. Create one to get started.
+          </p>
         )}
       </div>
     </div>
@@ -552,11 +612,13 @@ git commit -m "feat: dashboard layout with sidebar + project list"
 ### Task 5: Docker Runtime Backend
 
 **Files:**
+
 - Create: `app/lib/docker.server.ts`
 
 **Step 1: Implement Docker wrapper**
 
 `app/lib/docker.server.ts`:
+
 ```typescript
 import Docker from "dockerode";
 import { Readable } from "stream";
@@ -566,7 +628,9 @@ const docker = new Docker({ socketPath: "/var/run/docker.sock" });
 const NETWORK_NAME = "myrailway-internal";
 
 export async function ensureNetwork() {
-  const networks = await docker.listNetworks({ filters: { name: [NETWORK_NAME] } });
+  const networks = await docker.listNetworks({
+    filters: { name: [NETWORK_NAME] },
+  });
   if (networks.length === 0) {
     await docker.createNetwork({ Name: NETWORK_NAME, Driver: "bridge" });
   }
@@ -616,9 +680,7 @@ export async function createAndStartContainer(options: {
     portBindings[containerPort] = [{ HostPort: "0" }]; // random host port
   }
 
-  const binds = (options.volumes || []).map(
-    (v) => `${v.host}:${v.container}`,
-  );
+  const binds = (options.volumes || []).map((v) => `${v.host}:${v.container}`);
 
   const container = await docker.createContainer({
     Image: options.image,
@@ -665,17 +727,22 @@ export async function getContainerStats(containerId: string) {
     memoryUsageMb: (stats.memory_stats.usage || 0) / 1024 / 1024,
     memoryLimitMb: (stats.memory_stats.limit || 0) / 1024 / 1024,
     networkRxBytes: Object.values(stats.networks || {}).reduce(
-      (sum: number, n: any) => sum + (n.rx_bytes || 0), 0,
+      (sum: number, n: any) => sum + (n.rx_bytes || 0),
+      0,
     ),
     networkTxBytes: Object.values(stats.networks || {}).reduce(
-      (sum: number, n: any) => sum + (n.tx_bytes || 0), 0,
+      (sum: number, n: any) => sum + (n.tx_bytes || 0),
+      0,
     ),
   };
 }
 
 function calculateCpuPercent(stats: any): number {
-  const cpuDelta = stats.cpu_stats.cpu_usage.total_usage - stats.precpu_stats.cpu_usage.total_usage;
-  const sysDelta = stats.cpu_stats.system_cpu_usage - stats.precpu_stats.system_cpu_usage;
+  const cpuDelta =
+    stats.cpu_stats.cpu_usage.total_usage -
+    stats.precpu_stats.cpu_usage.total_usage;
+  const sysDelta =
+    stats.cpu_stats.system_cpu_usage - stats.precpu_stats.system_cpu_usage;
   const cpuCount = stats.cpu_stats.online_cpus || 1;
   if (sysDelta > 0) {
     return (cpuDelta / sysDelta) * cpuCount * 100;
@@ -683,7 +750,10 @@ function calculateCpuPercent(stats: any): number {
   return 0;
 }
 
-export async function getContainerPort(containerId: string, containerPort: number): Promise<number | null> {
+export async function getContainerPort(
+  containerId: string,
+  containerPort: number,
+): Promise<number | null> {
   const container = docker.getContainer(containerId);
   const info = await container.inspect();
   const portKey = `${containerPort}/tcp`;
@@ -717,11 +787,13 @@ git commit -m "feat: Docker runtime backend via dockerode"
 ### Task 6: Deploy Service — Git Clone + Docker Build + Start
 
 **Files:**
+
 - Create: `app/lib/deployer.server.ts`
 
 **Step 1: Implement deploy pipeline**
 
 `app/lib/deployer.server.ts`:
+
 ```typescript
 import { randomUUID } from "crypto";
 import { execSync } from "child_process";
@@ -739,18 +811,24 @@ export async function deploy(
   serviceId: string,
   onLog: DeployLog = () => {},
 ): Promise<string> {
-  const service = db.select().from(services).where(eq(services.id, serviceId)).get();
+  const service = db
+    .select()
+    .from(services)
+    .where(eq(services.id, serviceId))
+    .get();
   if (!service) throw new Error("Service not found");
 
   const deployId = randomUUID();
 
   // Insert deployment record
-  db.insert(deployments).values({
-    id: deployId,
-    serviceId,
-    status: "building",
-    createdAt: new Date(),
-  }).run();
+  db.insert(deployments)
+    .values({
+      id: deployId,
+      serviceId,
+      status: "building",
+      createdAt: new Date(),
+    })
+    .run();
 
   try {
     // 1. Clone repo
@@ -758,13 +836,20 @@ export async function deploy(
     const workDir = mkdtempSync(join(tmpdir(), "myrailway-build-"));
 
     if (service.repoUrl) {
-      execSync(`git clone --depth=1 --branch=${service.branch || "main"} ${service.repoUrl} .`, {
-        cwd: workDir,
-        stdio: "pipe",
-      });
+      execSync(
+        `git clone --depth=1 --branch=${service.branch || "main"} ${service.repoUrl} .`,
+        {
+          cwd: workDir,
+          stdio: "pipe",
+        },
+      );
 
-      const commitSha = execSync("git rev-parse HEAD", { cwd: workDir }).toString().trim();
-      const commitMsg = execSync("git log -1 --pretty=%B", { cwd: workDir }).toString().trim();
+      const commitSha = execSync("git rev-parse HEAD", { cwd: workDir })
+        .toString()
+        .trim();
+      const commitMsg = execSync("git log -1 --pretty=%B", { cwd: workDir })
+        .toString()
+        .trim();
 
       db.update(deployments)
         .set({ commitSha, commitMessage: commitMsg })
@@ -793,15 +878,26 @@ export async function deploy(
     onLog("Image built successfully.\n");
 
     // 3. Gather env vars
-    const vars = db.select().from(envVars).where(eq(envVars.serviceId, serviceId)).all();
+    const vars = db
+      .select()
+      .from(envVars)
+      .where(eq(envVars.serviceId, serviceId))
+      .all();
     const envMap: Record<string, string> = {};
     for (const v of vars) {
       envMap[v.key] = v.value;
     }
 
     // 4. Stop previous container
-    const prevDeploy = db.select().from(deployments)
-      .where(and(eq(deployments.serviceId, serviceId), eq(deployments.status, "active")))
+    const prevDeploy = db
+      .select()
+      .from(deployments)
+      .where(
+        and(
+          eq(deployments.serviceId, serviceId),
+          eq(deployments.status, "active"),
+        ),
+      )
       .get();
 
     if (prevDeploy?.containerId) {
@@ -844,15 +940,29 @@ export async function deploy(
 }
 
 export async function rollback(serviceId: string, targetDeployId: string) {
-  const target = db.select().from(deployments)
-    .where(and(eq(deployments.id, targetDeployId), eq(deployments.serviceId, serviceId)))
+  const target = db
+    .select()
+    .from(deployments)
+    .where(
+      and(
+        eq(deployments.id, targetDeployId),
+        eq(deployments.serviceId, serviceId),
+      ),
+    )
     .get();
 
   if (!target?.imageTag) throw new Error("Cannot rollback: no image tag");
 
   // Stop current active
-  const current = db.select().from(deployments)
-    .where(and(eq(deployments.serviceId, serviceId), eq(deployments.status, "active")))
+  const current = db
+    .select()
+    .from(deployments)
+    .where(
+      and(
+        eq(deployments.serviceId, serviceId),
+        eq(deployments.status, "active"),
+      ),
+    )
     .get();
 
   if (current?.containerId) {
@@ -864,11 +974,19 @@ export async function rollback(serviceId: string, targetDeployId: string) {
   }
 
   // Restart from target image
-  const vars = db.select().from(envVars).where(eq(envVars.serviceId, serviceId)).all();
+  const vars = db
+    .select()
+    .from(envVars)
+    .where(eq(envVars.serviceId, serviceId))
+    .all();
   const envMap: Record<string, string> = {};
   for (const v of vars) envMap[v.key] = v.value;
 
-  const service = db.select().from(services).where(eq(services.id, serviceId)).get()!;
+  const service = db
+    .select()
+    .from(services)
+    .where(eq(services.id, serviceId))
+    .get()!;
   const containerName = `myrailway-${service.name}-rollback-${Date.now()}`;
 
   const containerId = await docker.createAndStartContainer({
@@ -901,6 +1019,7 @@ git commit -m "feat: deploy service — git clone, Docker build, container start
 This task creates the core dashboard pages for viewing a project, managing services, deployments, and environment variables. These are the primary CRUD routes that users interact with.
 
 **Files:**
+
 - Create: `app/routes/_dashboard.project.$id.tsx`
 - Create: `app/routes/_dashboard.project.$id.services.tsx`
 - Create: `app/routes/_dashboard.project.$id.deployments.tsx`
@@ -924,6 +1043,7 @@ git commit -m "feat: project detail routes (services, deployments, env vars)"
 ### Task 8: Database Provisioning Service
 
 **Files:**
+
 - Create: `app/lib/databases.server.ts`
 - Create: `app/routes/_dashboard.project.$id.databases.tsx`
 
@@ -943,6 +1063,7 @@ git commit -m "feat: database provisioning (Postgres, Redis, MySQL via Docker)"
 ### Task 9: Networking — Traefik Reverse Proxy
 
 **Files:**
+
 - Create: `app/lib/networking.server.ts`
 - Create: `docker-compose.traefik.yml`
 
@@ -962,6 +1083,7 @@ git commit -m "feat: networking layer with Traefik reverse proxy"
 ### Task 10: Monitoring + Metrics Dashboard
 
 **Files:**
+
 - Create: `app/lib/metrics.server.ts`
 - Create: `app/routes/_dashboard.project.$id.monitoring.tsx`
 - Create: `app/components/metrics-chart.tsx`
@@ -982,6 +1104,7 @@ git commit -m "feat: monitoring dashboard with container metrics"
 ### Task 11: CLI Tool
 
 **Files:**
+
 - Create: `cli/package.json`
 - Create: `cli/src/index.ts`
 - Create: `cli/src/commands/deploy.ts`
@@ -1011,6 +1134,7 @@ git commit -m "feat: CLI tool (myrailway) with deploy, logs, env commands"
 ### Task 12: Scaling — Replicas + Health Checks
 
 **Files:**
+
 - Modify: `app/lib/docker.server.ts`
 - Create: `app/lib/scaling.server.ts`
 - Modify: `app/routes/_dashboard.project.$id.services.tsx`
@@ -1031,6 +1155,7 @@ git commit -m "feat: service scaling with replicas + health checks"
 ### Task 13: Teams + Billing
 
 **Files:**
+
 - Create: `app/routes/_dashboard.teams.tsx`
 - Create: `app/lib/billing.server.ts`
 - Create: `app/routes/_dashboard.billing.tsx`
@@ -1055,6 +1180,7 @@ git commit -m "feat: teams + usage-based billing"
 ### Task 14: Templates + Cron Jobs + Volumes
 
 **Files:**
+
 - Create: `app/lib/templates.server.ts`
 - Create: `app/routes/_dashboard.templates.tsx`
 
@@ -1082,6 +1208,7 @@ git commit -m "feat: templates, cron jobs, persistent volumes"
 ### Task 15: E2E Tests with BraveMCP
 
 **Files:**
+
 - Create: `tests/e2e/auth.test.ts`
 - Create: `tests/e2e/deploy.test.ts`
 - Create: `tests/e2e/projects.test.ts`
@@ -1111,6 +1238,7 @@ gh repo create GaetanJuvin/my_railway --public --source=. --remote=origin --push
 **Step 2: Create GitHub Issues for each phase**
 
 Create labeled issues (`todo`, `priority:N`) for Symphony to pick up:
+
 - Phase 1 issues: scaffold, schema, auth, dashboard, docker
 - Phase 2 issues: deploy service, service CRUD, env vars
 - Phase 3 issues: database provisioning

@@ -23,9 +23,8 @@ vi.mock("~/lib/db.server", async () => {
 // Set required env vars before importing auth
 process.env.SESSION_SECRET = "test-secret-for-tests-only";
 
-const { signup, login, requireUser, logout, createSession } = await import(
-  "~/lib/auth.server"
-);
+const { signup, login, requireUser, logout, createSession } =
+  await import("~/lib/auth.server");
 
 describe("signup", () => {
   beforeEach(async () => {
@@ -88,7 +87,9 @@ describe("requireUser", () => {
 
     await expect(result).rejects.toSatisfy(
       (e: unknown) =>
-        e instanceof Response && e.status === 302 && e.headers.get("Location") === "/login",
+        e instanceof Response &&
+        e.status === 302 &&
+        e.headers.get("Location") === "/login",
     );
   });
 });

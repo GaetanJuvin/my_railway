@@ -23,20 +23,20 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for full system layers.
 
 ## Directory Map
 
-| Path | Purpose |
-|------|---------|
-| `app/routes/` | React Router v7 file-based routes |
-| `app/components/` | shadcn/ui primitives + custom components |
-| `app/components/ui/` | shadcn base components |
-| `app/lib/` | Server-side services (.server.ts) + shared utils |
-| `app/lib/db.server.ts` | Drizzle ORM setup + connection |
-| `app/lib/docker.server.ts` | Dockerode wrapper |
-| `app/lib/deployer.server.ts` | Build + deploy pipeline |
-| `app/lib/networking.server.ts` | Reverse proxy management |
-| `app/lib/auth.server.ts` | Session-based auth |
-| `drizzle/` | Database migrations |
-| `cli/` | CLI tool (`myrailway`) |
-| `tests/e2e/` | BraveMCP browser tests |
+| Path                           | Purpose                                          |
+| ------------------------------ | ------------------------------------------------ |
+| `app/routes/`                  | React Router v7 file-based routes                |
+| `app/components/`              | shadcn/ui primitives + custom components         |
+| `app/components/ui/`           | shadcn base components                           |
+| `app/lib/`                     | Server-side services (.server.ts) + shared utils |
+| `app/lib/db.server.ts`         | Drizzle ORM setup + connection                   |
+| `app/lib/docker.server.ts`     | Dockerode wrapper                                |
+| `app/lib/deployer.server.ts`   | Build + deploy pipeline                          |
+| `app/lib/networking.server.ts` | Reverse proxy management                         |
+| `app/lib/auth.server.ts`       | Session-based auth                               |
+| `drizzle/`                     | Database migrations                              |
+| `cli/`                         | CLI tool (`myrailway`)                           |
+| `tests/e2e/`                   | BraveMCP browser tests                           |
 
 ## Key Documentation
 
@@ -48,6 +48,7 @@ See [ARCHITECTURE.md](./ARCHITECTURE.md) for full system layers.
 ## Pre-Work Checklist
 
 Before modifying code:
+
 1. Read the relevant route/service code
 2. Check `ARCHITECTURE.md` for dependency rules
 3. Verify active plans in `docs/plans/`
